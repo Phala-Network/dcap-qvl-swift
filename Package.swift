@@ -1,16 +1,6 @@
 // swift-tools-version:5.7
 import PackageDescription
 
-// NOTE: This is the placeholder manifest for the default branch.
-//
-// Each `v*` release of Phala-Network/dcap-qvl regenerates this file via
-// `.github/workflows/ios-release.yml`, replacing the stub target below with a
-// `.binaryTarget(url:checksum:)` pointing at that release's
-// `DcapQvlFFI.xcframework.zip`, and tags the satellite with the matching
-// semver. Resolve the package by version, not by branch:
-//
-//     .package(url: "https://github.com/Phala-Network/dcap-qvl-swift", from: "0.6.0")
-
 let package = Package(
     name: "DcapQvl",
     platforms: [
@@ -21,6 +11,11 @@ let package = Package(
         .library(name: "DcapQvl", targets: ["DcapQvl"]),
     ],
     targets: [
-        .target(name: "DcapQvl", path: "Sources/DcapQvl"),
+        .binaryTarget(
+            name: "DcapQvlFFI",
+            url: "https://github.com/Phala-Network/dcap-qvl/releases/download/v0.5.2/DcapQvlFFI.xcframework.zip",
+            checksum: "1903b2c4792a26321fc92f9b54a3c4fc7b3871906242409997fa75c20366fdf2"
+        ),
+        .target(name: "DcapQvl", dependencies: ["DcapQvlFFI"], path: "Sources/DcapQvl"),
     ]
 )
