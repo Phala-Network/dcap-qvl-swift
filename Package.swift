@@ -13,8 +13,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "DcapQvlFFI",
-            url: "https://github.com/Phala-Network/dcap-qvl/releases/download/v0.6.2/DcapQvlFFI.xcframework.zip",
-            checksum: "a017795653e3f4aa295f8210749b0e2c72a027a959cc6c4be1fd46a10aa927e4"
+            url: "https://github.com/Phala-Network/dcap-qvl/releases/download/v0.6.3/DcapQvlFFI.xcframework.zip",
+            checksum: "8e45ae819e8f5b609c8c6d697e45e725556a6bb1899e5a46ce72e02c2c56e632"
         ),
         .target(name: "DcapQvl", dependencies: ["DcapQvlFFI"], path: "Sources/DcapQvl"),
     ]
