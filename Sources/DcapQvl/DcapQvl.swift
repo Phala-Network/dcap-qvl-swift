@@ -398,6 +398,22 @@ private class UniffiHandleMap<T> {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
+private struct FfiConverterUInt8: FfiConverterPrimitive {
+    typealias FfiType = UInt8
+    typealias SwiftType = UInt8
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt8 {
+        return try lift(readInt(&buf))
+    }
+
+    static func write(_ value: UInt8, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
 private struct FfiConverterUInt16: FfiConverterPrimitive {
     typealias FfiType = UInt16
     typealias SwiftType = UInt16
@@ -1186,6 +1202,142 @@ public func FfiConverterTypeTd10Report_lower(_ value: Td10Report) -> RustBuffer 
 }
 
 /**
+ * TDX 1.5ex report fields (extends 1.5; quote v5 body type 4).
+ */
+public struct Td15ExReport {
+    public var base: Td15Report
+    public var vmid: UInt8
+    public var tdId: Data
+    public var devInfo: Data
+    public var initServiceTdHash: Data
+    public var initServiceTdAttributes: Data
+    public var initCpuSvn: Data
+    public var initTeeTcbSvn: Data
+    public var initTeeFmspc: Data
+    public var curServiceTdHash: Data
+    public var curServiceTdAttributes: Data
+
+    /// Default memberwise initializers are never public by default, so we
+    /// declare one manually.
+    public init(base: Td15Report, vmid: UInt8, tdId: Data, devInfo: Data, initServiceTdHash: Data, initServiceTdAttributes: Data, initCpuSvn: Data, initTeeTcbSvn: Data, initTeeFmspc: Data, curServiceTdHash: Data, curServiceTdAttributes: Data) {
+        self.base = base
+        self.vmid = vmid
+        self.tdId = tdId
+        self.devInfo = devInfo
+        self.initServiceTdHash = initServiceTdHash
+        self.initServiceTdAttributes = initServiceTdAttributes
+        self.initCpuSvn = initCpuSvn
+        self.initTeeTcbSvn = initTeeTcbSvn
+        self.initTeeFmspc = initTeeFmspc
+        self.curServiceTdHash = curServiceTdHash
+        self.curServiceTdAttributes = curServiceTdAttributes
+    }
+}
+
+extension Td15ExReport: Equatable, Hashable {
+    public static func == (lhs: Td15ExReport, rhs: Td15ExReport) -> Bool {
+        if lhs.base != rhs.base {
+            return false
+        }
+        if lhs.vmid != rhs.vmid {
+            return false
+        }
+        if lhs.tdId != rhs.tdId {
+            return false
+        }
+        if lhs.devInfo != rhs.devInfo {
+            return false
+        }
+        if lhs.initServiceTdHash != rhs.initServiceTdHash {
+            return false
+        }
+        if lhs.initServiceTdAttributes != rhs.initServiceTdAttributes {
+            return false
+        }
+        if lhs.initCpuSvn != rhs.initCpuSvn {
+            return false
+        }
+        if lhs.initTeeTcbSvn != rhs.initTeeTcbSvn {
+            return false
+        }
+        if lhs.initTeeFmspc != rhs.initTeeFmspc {
+            return false
+        }
+        if lhs.curServiceTdHash != rhs.curServiceTdHash {
+            return false
+        }
+        if lhs.curServiceTdAttributes != rhs.curServiceTdAttributes {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(base)
+        hasher.combine(vmid)
+        hasher.combine(tdId)
+        hasher.combine(devInfo)
+        hasher.combine(initServiceTdHash)
+        hasher.combine(initServiceTdAttributes)
+        hasher.combine(initCpuSvn)
+        hasher.combine(initTeeTcbSvn)
+        hasher.combine(initTeeFmspc)
+        hasher.combine(curServiceTdHash)
+        hasher.combine(curServiceTdAttributes)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTd15ExReport: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Td15ExReport {
+        return
+            try Td15ExReport(
+                base: FfiConverterTypeTd15Report.read(from: &buf),
+                vmid: FfiConverterUInt8.read(from: &buf),
+                tdId: FfiConverterData.read(from: &buf),
+                devInfo: FfiConverterData.read(from: &buf),
+                initServiceTdHash: FfiConverterData.read(from: &buf),
+                initServiceTdAttributes: FfiConverterData.read(from: &buf),
+                initCpuSvn: FfiConverterData.read(from: &buf),
+                initTeeTcbSvn: FfiConverterData.read(from: &buf),
+                initTeeFmspc: FfiConverterData.read(from: &buf),
+                curServiceTdHash: FfiConverterData.read(from: &buf),
+                curServiceTdAttributes: FfiConverterData.read(from: &buf)
+            )
+    }
+
+    public static func write(_ value: Td15ExReport, into buf: inout [UInt8]) {
+        FfiConverterTypeTd15Report.write(value.base, into: &buf)
+        FfiConverterUInt8.write(value.vmid, into: &buf)
+        FfiConverterData.write(value.tdId, into: &buf)
+        FfiConverterData.write(value.devInfo, into: &buf)
+        FfiConverterData.write(value.initServiceTdHash, into: &buf)
+        FfiConverterData.write(value.initServiceTdAttributes, into: &buf)
+        FfiConverterData.write(value.initCpuSvn, into: &buf)
+        FfiConverterData.write(value.initTeeTcbSvn, into: &buf)
+        FfiConverterData.write(value.initTeeFmspc, into: &buf)
+        FfiConverterData.write(value.curServiceTdHash, into: &buf)
+        FfiConverterData.write(value.curServiceTdAttributes, into: &buf)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTd15ExReport_lift(_ buf: RustBuffer) throws -> Td15ExReport {
+    return try FfiConverterTypeTd15ExReport.lift(buf)
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTd15ExReport_lower(_ value: Td15ExReport) -> RustBuffer {
+    return FfiConverterTypeTd15ExReport.lower(value)
+}
+
+/**
  * TDX 1.5 report fields (extends 1.0).
  */
 public struct Td15Report {
@@ -1469,13 +1621,14 @@ extension QuoteKind: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /* 
- * Tagged-union report: one of SGX, TDX 1.0, or TDX 1.5.
+ * Tagged-union report: one of SGX, TDX 1.0, TDX 1.5, or TDX 1.5ex.
  */
 
 public enum Report {
     case sgx(report: SgxReport)
     case td10(report: Td10Report)
     case td15(report: Td15Report)
+    case td15Ex(report: Td15ExReport)
 }
 
 #if swift(>=5.8)
@@ -1492,6 +1645,8 @@ public struct FfiConverterTypeReport: FfiConverterRustBuffer {
         case 2: return try .td10(report: FfiConverterTypeTd10Report.read(from: &buf))
 
         case 3: return try .td15(report: FfiConverterTypeTd15Report.read(from: &buf))
+
+        case 4: return try .td15Ex(report: FfiConverterTypeTd15ExReport.read(from: &buf))
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1510,6 +1665,10 @@ public struct FfiConverterTypeReport: FfiConverterRustBuffer {
         case let .td15(report):
             writeInt(&buf, Int32(3))
             FfiConverterTypeTd15Report.write(report, into: &buf)
+
+        case let .td15Ex(report):
+            writeInt(&buf, Int32(4))
+            FfiConverterTypeTd15ExReport.write(report, into: &buf)
         }
     }
 }
@@ -1544,6 +1703,8 @@ public enum TcbStatus {
     case configurationNeeded
     case swHardeningNeeded
     case revoked
+    case tdRelaunchAdvised
+    case tdRelaunchAdvisedConfigurationNeeded
 }
 
 #if swift(>=5.8)
@@ -1568,6 +1729,10 @@ public struct FfiConverterTypeTcbStatus: FfiConverterRustBuffer {
         case 6: return .swHardeningNeeded
 
         case 7: return .revoked
+
+        case 8: return .tdRelaunchAdvised
+
+        case 9: return .tdRelaunchAdvisedConfigurationNeeded
 
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1595,6 +1760,12 @@ public struct FfiConverterTypeTcbStatus: FfiConverterRustBuffer {
 
         case .revoked:
             writeInt(&buf, Int32(7))
+
+        case .tdRelaunchAdvised:
+            writeInt(&buf, Int32(8))
+
+        case .tdRelaunchAdvisedConfigurationNeeded:
+            writeInt(&buf, Int32(9))
         }
     }
 }
